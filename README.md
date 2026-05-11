@@ -1,134 +1,136 @@
-# MediSchedule - Sistema de Agendamento de Consultas Médicas
+# MediSchedule - Medical Appointment Scheduling API
 
-Plataforma backend de API REST para agendamento e gerenciamento de consultas médicas. Conecta pacientes e médicos de forma eficiente e segura.
+A robust backend REST API for managing medical appointments and user scheduling. Connects patients and doctors efficiently and securely.
 
-## 📋 Pré-requisitos
+**Read this in other languages:** [Português (Brasil)](README.pt-br.md)
+
+## 📋 Prerequisites
 
 - **Java 21+**
 - **Maven 3.8+**
 - **MySQL 8.0+**
 - **Git**
 
-## 🚀 Como Rodar o Projeto
+## 🚀 Getting Started
 
-### 1. Clone o repositório
+### 1. Clone the repository
 ```bash
-git clone <url-do-repositorio>
-cd estalinho-back
+git clone https://github.com/vrzindev/spring-boot-med-api.git
+cd spring-boot-med-api
 ```
 
-### 2. Configure as variáveis de ambiente
+### 2. Configure environment variables
 
-Crie um arquivo `.env` na raiz do projeto ou configure as variáveis do sistema:
+Create a `.env` file or set system variables:
 
 ```bash
 DB_URL=jdbc:mysql://localhost:3306/estalinho
-DB_USER=seu_usuario
-DB_PASSWORD=sua_senha
+DB_USER=your_username
+DB_PASSWORD=your_password
 ```
 
-Ou edite o arquivo `src/main/resources/application.properties`:
+Or edit `src/main/resources/application.properties`:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/estalinho
 spring.datasource.username=root
-spring.datasource.password=sua_senha
+spring.datasource.password=your_password
 ```
 
-### 3. Instale as dependências e compile
+### 3. Install dependencies and compile
 
 ```bash
 mvn clean install
 ```
 
-### 4. Execute a aplicação
+### 4. Run the application
 
 ```bash
 mvn spring-boot:run
 ```
 
-A aplicação estará disponível em `http://localhost:8080`
+The application will be available at `http://localhost:8080`
 
-## 📚 Endpoints da API
+## 📚 API Endpoints
 
-### Usuários
+### Users
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/user/` | Listar todos os usuários |
-| POST | `/user/` | Criar novo usuário |
-| PUT | `/user/` | Atualizar usuário |
-| DELETE | `/user/{id}` | Deletar usuário |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/user/` | List all users |
+| POST | `/user/` | Create a new user |
+| PUT | `/user/` | Update user |
+| DELETE | `/user/{id}` | Delete user |
 
-### Agendamentos
+### Appointments
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/appointment/` | Listar todos os agendamentos |
-| POST | `/appointment/` | Criar novo agendamento |
-| PUT | `/appointment/` | Atualizar agendamento |
-| DELETE | `/appointment/{id}` | Deletar agendamento |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/appointment/` | List all appointments |
+| POST | `/appointment/` | Create a new appointment |
+| PUT | `/appointment/` | Update appointment |
+| DELETE | `/appointment/{id}` | Delete appointment |
 
-## 📊 Modelo de Dados
+## 📊 Data Model
 
-### Usuário (TB_USUARIOS)
+### User (TB_USUARIOS)
 ```json
 {
   "id": "long",
-  "cpf": "string (obrigatório)",
-  "nome": "string (obrigatório)",
-  "email": "string (obrigatório, válido)",
-  "senha": "string (obrigatório)",
-  "tipoUsuarioEnum": "MEDICO ou PACIENTE",
-  "estadoUsuarioEnum": "ATIVO ou INATIVO",
+  "cpf": "string (required)",
+  "nome": "string (required)",
+  "email": "string (required, valid email)",
+  "senha": "string (required)",
+  "tipoUsuarioEnum": "MEDICO or PACIENTE",
+  "estadoUsuarioEnum": "ATIVO or INATIVO",
   "dataInclusao": "LocalDate",
   "dataAlteracao": "LocalDate"
 }
 ```
 
-### Agendamento (TB_CONSULTAS)
+### Appointment (TB_CONSULTAS)
 ```json
 {
   "id": "long",
-  "fkMedico": "long (obrigatório)",
-  "fkPaciente": "long (obrigatório)",
-  "dataConsulta": "LocalDateTime (obrigatório)",
+  "fkMedico": "long (required)",
+  "fkPaciente": "long (required)",
+  "dataConsulta": "LocalDateTime (required)",
   "estadoConsultaEnum": "AGENDADA, REALIZADA, CANCELADA",
   "dataInclusao": "LocalDate",
   "dataAlteracao": "LocalDate"
 }
 ```
 
-## 🏗️ Arquitetura do Projeto
+## 🏗️ Project Architecture
 
 ```
 src/main/java/Estalinho/estalinho/
-├── EstalinhoApplication.java     # Classe principal
-├── controller/                   # Controllers REST
+├── EstalinhoApplication.java     # Main application class
+├── controller/                   # REST Controllers
 │   ├── UserController.java
 │   └── AppointmentController.java
-├── service/                      # Lógica de negócio
+├── service/                      # Business logic
 │   ├── UserService.java
 │   └── AppointmentService.java
-├── repository/                   # Acesso a dados (JPA)
+├── repository/                   # Data access layer (JPA)
 │   ├── UserRepository.java
 │   └── AppointmentRepository.java
 ├── domain/
 │   └── user/
-│       ├── entity/              # Entidades JPA
+│       ├── entity/              # JPA Entities
 │       │   ├── User.java
 │       │   └── Appointment.java
-│       ├── dto/                 # DTOs (Data Transfer Objects)
+│       ├── dto/                 # Data Transfer Objects
 │       │   ├── user/
 │       │   └── appointment/
-│       └── Enum/                # Enumerações
+│       └── Enum/                # Enumerations
 │           ├── TipoUsuarioEnum.java
 │           ├── EstadoUsuarioEnum.java
 │           └── EstadoConsultaEnum.java
-├── config/                      # Configurações
+├── config/                      # Configuration classes
 │   ├── CorsConfig.java
 │   └── SecurityConfig.java
-└── exception/                   # Tratamento de exceções
+└── exception/                   # Exception handling
     ├── GlobalExceptionHandler.java
     ├── AlreadyExistException.java
     ├── DisableException.java
@@ -137,41 +139,41 @@ src/main/java/Estalinho/estalinho/
     └── NotFoundException.java
 ```
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Technologies
 
-- **Spring Boot 3.4.4** - Framework web
-- **Spring Data JPA** - ORM para persistência
-- **Spring Security** - Autenticação e autorização
-- **MySQL** - Banco de dados relacional
-- **Lombok** - Redução de boilerplate
-- **Jakarta Validation** - Validação de entrada
-- **Maven** - Gerenciador de dependências
+- **Spring Boot 3.4.4** - Web framework
+- **Spring Data JPA** - ORM for data persistence
+- **Spring Security** - Authentication and authorization
+- **MySQL** - Relational database
+- **Lombok** - Reduces boilerplate code
+- **Jakarta Validation** - Input validation
+- **Maven** - Dependency manager
 
-## 🔐 Segurança
+## 🔐 Security Features
 
-- Spring Security configurado em `SecurityConfig.java`
-- Validação de entrada com DTOs e anotações Jakarta
-- CORS configurado em `CorsConfig.java`
-- Tratamento centralizado de exceções
+- Spring Security configuration in `SecurityConfig.java`
+- Input validation with DTOs and Jakarta annotations
+- CORS configuration in `CorsConfig.java`
+- Centralized exception handling
 
-## 📝 Exemplo de Uso
+## 💡 Usage Examples
 
-### Criar um usuário
+### Create a user
 ```bash
 curl -X POST http://localhost:8080/user/ \
   -H "Content-Type: application/json" \
   -d '{
     "cpf": "123.456.789-00",
-    "nome": "Dr. João Silva",
-    "email": "joao@example.com",
-    "senha": "senha123",
+    "nome": "Dr. John Smith",
+    "email": "john@example.com",
+    "senha": "password123",
     "tipoUsuarioEnum": 0,
     "estadoUsuarioEnum": 0,
     "dataInclusao": "2024-05-10"
   }'
 ```
 
-### Criar um agendamento
+### Create an appointment
 ```bash
 curl -X POST http://localhost:8080/appointment/ \
   -H "Content-Type: application/json" \
@@ -184,21 +186,25 @@ curl -X POST http://localhost:8080/appointment/ \
   }'
 ```
 
-## 🧪 Testes
+## 🧪 Running Tests
 
-Execute os testes com:
+Execute tests with:
 ```bash
 mvn test
 ```
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 👤 Autor
+## 👤 Author
 
-Desenvolvido como projeto de aprendizado em Spring Boot e arquitetura REST.
+Developed as a learning project for Spring Boot and REST API architecture.
 
-## 📞 Suporte
+## 📞 Support
 
-Para dúvidas ou sugestões, abra uma issue no repositório.
+For questions or suggestions, please open an issue on the repository.
+
+---
+
+**Other languages:** [Português (Brasil)](README.pt-br.md)
